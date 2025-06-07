@@ -30,7 +30,7 @@ if ! command -v bc &> /dev/null; then
 fi
 
 # Check if run.sh exists
-if [ ! -f "run_$1.sh" ]; then
+if [ ! -f "run.sh" ]; then
     echo "❌ Error: run.sh not found!"
     echo "Please create a run.sh script that takes three parameters:"
     echo "  ./run.sh <trip_duration_days> <miles_traveled> <total_receipts_amount>"
@@ -39,7 +39,7 @@ if [ ! -f "run_$1.sh" ]; then
 fi
 
 # Make run.sh executable
-chmod +x run_$1.sh
+chmod +x run.sh
 
 # Check if public cases exist
 if [ ! -f "public_cases.json" ]; then
@@ -82,7 +82,7 @@ for ((i=0; i<num_cases; i++)); do
     IFS=':' read -r trip_duration miles_traveled receipts_amount expected <<< "${test_cases[i]}"
     
     # Run the user's implementation
-    if script_output=$(./run_$1.sh "$trip_duration" "$miles_traveled" "$receipts_amount" 2>/dev/null); then
+    if script_output=$(./run.sh "$trip_duration" "$miles_traveled" "$receipts_amount" 2>/dev/null); then
         # Check if output is a valid number
         output=$(echo "$script_output" | tr -d '[:space:]')
         if [[ $output =~ ^-?[0-9]+\.?[0-9]*$ ]]; then
@@ -120,7 +120,7 @@ for ((i=0; i<num_cases; i++)); do
         fi
     else
         # Capture stderr for error reporting
-        error_msg=$(./run_$1.sh "$trip_duration" "$miles_traveled" "$receipts_amount" 2>&1 >/dev/null | tr -d '\n')
+        error_msg=$(./run.sh "$trip_duration" "$miles_traveled" "$receipts_amount" 2>&1 >/dev/null | tr -d '\n')
         errors_array+=("Case $((i+1)): Script failed with error: $error_msg")
     fi
 done
